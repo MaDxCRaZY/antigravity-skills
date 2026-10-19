@@ -8,6 +8,30 @@ Enterprise-grade skill extensions for **Google Antigravity** (`agy`). This repos
 
 ---
 
+## 📑 Quick Navigation
+
+* [⚡ **1-Prompt Agentic Installation**](#quick-start)
+* [🛠️ **Included Slash Commands**](#commands)
+* [💡 **Real-World Use Cases & Prompt Examples**](#use-cases)
+  * [`/owl`: The Heisenbug & Downstream Regressions](#owl-use-case)
+  * [`/battle`: High-Stakes Architectural Decisions](#battle-use-case)
+  * [`/benchmark`: Verifying Hot-Path Optimization](#benchmark-use-case)
+  * [`/compaction`: Marathon Coding Sessions & Context Drift](#compaction-use-case)
+* [🧠 **Architectural Deep Dive**](#architecture)
+  * [`/owl` Decoupled Pipeline (Flowchart)](#owl-architecture)
+  * [`/battle` Colosseum Tournament (Flowchart)](#battle-architecture)
+  * [`/benchmark` Telemetry Protocol](#benchmark-architecture)
+  * [`/compaction` State Preservation](#compaction-architecture)
+* [📦 **Manual & CLI Installation**](#installation)
+  * [Windows (PowerShell)](#install-windows)
+  * [Linux / macOS (Bash)](#install-nix)
+  * [Workspace-Specific Setup](#install-workspace)
+* [🔍 **Verification**](#verification)
+* [📄 **License**](#license)
+
+---
+
+<a id="quick-start"></a>
 ## ⚡ Quick Start: 1-Prompt Agentic Installation
 
 If you are currently inside an **Antigravity session**, paste this exact prompt into your chat window:
@@ -18,6 +42,7 @@ The agent will clone the repository, deploy each skill to your global configurat
 
 ---
 
+<a id="commands"></a>
 ## 🛠️ Included Slash Commands
 
 | Command | Category | Engine Pipeline | Description |
@@ -29,8 +54,10 @@ The agent will clone the repository, deploy each skill to your global configurat
 
 ---
 
+<a id="use-cases"></a>
 ## 💡 Real-World Use Cases & Prompt Examples
 
+<a id="owl-use-case"></a>
 ### 1. `/owl` — The Heisenbug & Subtle Race Condition
 * **When to use:** Intermittent crashes, complex memory corruption, API refactors where downstream callers break easily, or bugs where band-aid fixes create regressions.
 * **The Problem with Standard Agents:** A typical coding agent spots a null-pointer crash on line 42 and slaps an `if (!ptr) return;` band-aid over it. This stops the crash, but silently breaks timers, drops events, and leaks memory downstream.
@@ -42,6 +69,7 @@ The agent will clone the repository, deploy each skill to your global configurat
 
 ---
 
+<a id="battle-use-case"></a>
 ### 2. `/battle` — High-Stakes Architectural Decisions
 * **When to use:** Architectural dilemmas where there is no single consensus answer, or performance-critical subsystems (e.g., Lock-Free Ring Buffer vs. Mutex Queue, Visitor Pattern vs. Match Pattern, Memory-Mapped I/O vs. Buffered Streams).
 * **The Problem with Standard Agents:** A single agent picks whatever approach is most prevalent in its training weights and confidently claims it is optimal.
@@ -56,6 +84,7 @@ The agent will clone the repository, deploy each skill to your global configurat
 
 ---
 
+<a id="benchmark-use-case"></a>
 ### 3. `/benchmark` — Verifying Hot-Path Optimization
 * **When to use:** Hot-path algorithms, SIMD optimizations, database queries, parsers, and deserializers.
 * **The Problem with Standard Agents:** LLMs frequently claim: *"I rewrote this loop using std::move and reserve(); it is now 3x faster!"* without ever running code.
@@ -67,6 +96,7 @@ The agent will clone the repository, deploy each skill to your global configurat
 
 ---
 
+<a id="compaction-use-case"></a>
 ### 4. `/compaction` — Marathon Coding Sessions & Context Drift
 * **When to use:** Long multi-hour sessions (15+ turns, massive refactors, multi-file migrations) where the conversation becomes sluggish, context costs climb, or the agent begins "forgetting" earlier requirements.
 * **The Problem with Standard Agents:** As token limits are approached, models experience context degradation—losing track of edge-case rules or repeating previously failed attempts.
@@ -78,8 +108,10 @@ The agent will clone the repository, deploy each skill to your global configurat
 
 ---
 
+<a id="architecture"></a>
 ## 🧠 Architectural Deep Dive
 
+<a id="owl-architecture"></a>
 ### 1. `/owl` — Decoupled Specialist Pipeline
 Instead of single-pass guessing or fixing symptom $B$ by blindly patching $A$, `/owl` breaks the task into two decoupled specialists:
 * **DeepInvestigator**: Executes full-function call-tree audits, verifies register and pointer lifecycles, and attacks edge cases by asking: *"What if X, Y, Z, F, G occur?"*
@@ -95,6 +127,7 @@ flowchart LR
     Gates -- "Fail" --> DC
 ```
 
+<a id="battle-architecture"></a>
 ### 2. `/battle` — Colosseum Battle Mode
 When there are multiple architectural paths or competing algorithmic approaches, `/battle` eliminates single-agent bias by running an adversarial tournament:
 1. **Parallel Forking**: Two rival subagents work in isolated Git worktrees (`Workspace='branch'`).
@@ -112,12 +145,14 @@ flowchart TD
     Decision --> Merge["Crown Victor & Merge Winner Branch"]
 ```
 
+<a id="benchmark-architecture"></a>
 ### 3. `/benchmark` — Empirical Hardware Telemetry
 Replaces guesswork and synthetic claims with raw telemetry:
 * Synthesizes isolated, reproducible micro-benchmarks in scratch workspaces.
 * Executes headlessly via the terminal sandbox to capture median latency ($p50$), tail latency ($p99$), throughput, and peak memory (RSS).
 * Generates a side-by-side empirical comparison matrix.
 
+<a id="compaction-architecture"></a>
 ### 4. `/compaction` — Explicit Context Compaction
 Maintains execution momentum during long-running sessions:
 * Extracts active symbols, call trees, and ground-truth telemetry into persistent markdown artifacts.
@@ -126,8 +161,10 @@ Maintains execution momentum during long-running sessions:
 
 ---
 
+<a id="installation"></a>
 ## 📦 Manual & CLI Installation
 
+<a id="install-windows"></a>
 ### Windows (PowerShell)
 ```powershell
 git clone https://github.com/MaDxCRaZY/antigravity-skills.git "$env:TEMP\antigravity-skills"
@@ -135,6 +172,7 @@ git clone https://github.com/MaDxCRaZY/antigravity-skills.git "$env:TEMP\antigra
 Remove-Item -Recurse -Force "$env:TEMP\antigravity-skills"
 ```
 
+<a id="install-nix"></a>
 ### Linux / macOS (Bash)
 ```bash
 git clone https://github.com/MaDxCRaZY/antigravity-skills.git /tmp/antigravity-skills
@@ -142,6 +180,7 @@ bash /tmp/antigravity-skills/install.sh
 rm -rf /tmp/antigravity-skills
 ```
 
+<a id="install-workspace"></a>
 ### Workspace-Specific Installation
 To install these skills strictly for a single repository (without affecting your global profile):
 ```powershell
@@ -152,6 +191,7 @@ This deploys the skills into `.agents/skills/`, allowing team members checking o
 
 ---
 
+<a id="verification"></a>
 ## 🔍 Verification
 
 Once installed, reload your Antigravity IDE window or start a new CLI session. Type `/` in your chat input to verify that the commands appear in the autocompletion menu:
@@ -164,5 +204,6 @@ Once installed, reload your Antigravity IDE window or start a new CLI session. T
 
 ---
 
+<a id="license"></a>
 ## 📄 License
 This project is licensed under the [MIT License](LICENSE).
