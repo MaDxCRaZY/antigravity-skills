@@ -29,6 +29,55 @@ The agent will clone the repository, deploy each skill to your global configurat
 
 ---
 
+## 💡 Real-World Use Cases & Prompt Examples
+
+### 1. `/owl` — The Heisenbug & Subtle Race Condition
+* **When to use:** Intermittent crashes, complex memory corruption, API refactors where downstream callers break easily, or bugs where band-aid fixes create regressions.
+* **The Problem with Standard Agents:** A typical coding agent spots a null-pointer crash on line 42 and slaps an `if (!ptr) return;` band-aid over it. This stops the crash, but silently breaks timers, drops events, and leaks memory downstream.
+* **How `/owl` Solves It:** Splitting the task forces `DeepInvestigator` to map the object lifecycle, audit downstream consumers, and ask: *"What if connection reset fires while packet processing is queued?"* Once invariants are proven, `DeepCoder` executes the clean structural fix.
+* **Example Prompt:**
+  ```text
+  /owl Investigate why worker threads crash intermittently with SIGSEGV during client disconnects. Audit socket lifecycles and downstream packet queues across the call tree. Formulate and falsify edge-case hypotheses before writing any code.
+  ```
+
+---
+
+### 2. `/battle` — High-Stakes Architectural Decisions
+* **When to use:** Architectural dilemmas where there is no single consensus answer, or performance-critical subsystems (e.g., Lock-Free Ring Buffer vs. Mutex Queue, Visitor Pattern vs. Match Pattern, Memory-Mapped I/O vs. Buffered Streams).
+* **The Problem with Standard Agents:** A single agent picks whatever approach is most prevalent in its training weights and confidently claims it is optimal.
+* **How `/battle` Solves It:** Forks your repository into two isolated Git worktrees (`Workspace='branch'`). Competitor Arm Alpha builds Approach A, Competitor Arm Beta builds Approach B. An adversarial referee (`critic@colosseum`) fuzzes and attacks both branches, benchmarks them under load, crowns the winner, and merges it back into your project.
+* **Example Prompt:**
+  ```text
+  /battle We need a high-throughput event logging queue for our game engine.
+  Arm Alpha: Implement a lock-free circular ring buffer with atomic CAS.
+  Arm Beta: Implement a double-buffering batching queue with condition variables.
+  Stress-test both under 100 concurrent worker threads, detect race conditions, and merge the superior implementation.
+  ```
+
+---
+
+### 3. `/benchmark` — Verifying Hot-Path Optimization
+* **When to use:** Hot-path algorithms, SIMD optimizations, database queries, parsers, and deserializers.
+* **The Problem with Standard Agents:** LLMs frequently claim: *"I rewrote this loop using std::move and reserve(); it is now 3x faster!"* without ever running code.
+* **How `/benchmark` Solves It:** Generates a standalone, executable micro-benchmark harness in a scratch workspace, compiles and executes it headlessly via `run_command`, and outputs a side-by-side empirical telemetry matrix ($p50$/$p99$ latency, throughput, peak memory RSS).
+* **Example Prompt:**
+  ```text
+  /benchmark Optimize parse_json_payload() in parser.cpp for 20MB log payloads. Synthesize an ad-hoc C++ benchmark harness, run it headlessly across 50 iterations, and report raw p50/p99 latency and RSS memory consumption comparing baseline vs candidate.
+  ```
+
+---
+
+### 4. `/compaction` — Marathon Coding Sessions & Context Drift
+* **When to use:** Long multi-hour sessions (15+ turns, massive refactors, multi-file migrations) where the conversation becomes sluggish, context costs climb, or the agent begins "forgetting" earlier requirements.
+* **The Problem with Standard Agents:** As token limits are approached, models experience context degradation—losing track of edge-case rules or repeating previously failed attempts.
+* **How `/compaction` Solves It:** Audits the active session, extracts the durable mental model (active file paths, struct layouts, verified hypotheses, next steps) into persistent markdown artifacts, flushes obsolete compiler errors, and resets active memory.
+* **Example Prompt:**
+  ```text
+  /compaction We just completed the network layer audit. Extract all discovered packet opcodes, state machines, and verified struct layouts into docs/network_state.md, prune transient build logs, and reset the context window for the graphics subsystem.
+  ```
+
+---
+
 ## 🧠 Architectural Deep Dive
 
 ### 1. `/owl` — Decoupled Specialist Pipeline
